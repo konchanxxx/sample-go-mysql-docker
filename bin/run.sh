@@ -5,5 +5,5 @@ until mysqladmin ping -h db --silent; do
   sleep 2
 done
 
-echo 'Server is staring!'
+echo 'Database is launched!!'
 exec go run main.go
