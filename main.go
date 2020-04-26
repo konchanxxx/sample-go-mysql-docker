@@ -23,6 +23,7 @@ func init() {
 	}
 	defer conn.Close()
 
+	// GORMのauto migrationを利用する。rollbackできないので本番環境等は別でmigrationの仕組みを入れる必要がある
 	conn.AutoMigrate(&Product{})
 }
 
@@ -39,6 +40,7 @@ func main() {
 }
 
 // Product は商品
+// GORMのカラム名は指定しなければ自動でスネークケースで生成してくれる
 type Product struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
@@ -84,6 +86,7 @@ func getProductLatest(w http.ResponseWriter, r *http.Request) {
 }
 
 func getConn() (*gorm.DB, error) {
+	// hostはdocker-composeで指定したサービス名になる
 	connectionString := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?parseTime=true&loc=Local&charset=utf8mb4",
 		"user",
